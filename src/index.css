@@ -1,0 +1,186 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Pirate Theme Colors */
+    --background: 36 39% 88%;
+    --foreground: 30 25% 12%;
+    
+    /* Parchment & aged paper */
+    --card: 38 44% 82%;
+    --card-foreground: 30 25% 12%;
+    
+    --popover: 38 44% 82%;
+    --popover-foreground: 30 25% 12%;
+    
+    /* Gold treasure */
+    --primary: 43 74% 49%;
+    --primary-foreground: 30 25% 12%;
+    
+    /* Ocean blue */
+    --secondary: 200 69% 30%;
+    --secondary-foreground: 36 39% 88%;
+    
+    /* Weathered wood */
+    --muted: 30 20% 40%;
+    --muted-foreground: 36 39% 88%;
+    
+    /* Brass compass */
+    --accent: 36 64% 35%;
+    --accent-foreground: 36 39% 88%;
+    
+    /* Danger red */
+    --destructive: 0 84% 45%;
+    --destructive-foreground: 36 39% 88%;
+    
+    /* UI elements */
+    --border: 30 20% 65%;
+    --input: 36 39% 78%;
+    --ring: 43 74% 49%;
+    
+    --radius: 0.375rem;
+    
+    /* Custom pirate theme tokens */
+    --parchment: 36 39% 88%;
+    --parchment-dark: 30 35% 75%;
+    --treasure-gold: 43 74% 49%;
+    --treasure-glow: 43 90% 65%;
+    --ocean-deep: 200 69% 25%;
+    --ocean-light: 200 50% 45%;
+    --wood-dark: 30 25% 20%;
+    --wood-light: 30 20% 35%;
+    --brass: 36 64% 42%;
+    --brass-light: 36 60% 55%;
+    --map-ink: 30 25% 12%;
+    --blood-red: 0 70% 40%;
+    
+    /* Gradients */
+    --gradient-ocean: linear-gradient(180deg, hsl(200 50% 45%), hsl(200 69% 25%));
+    --gradient-treasure: linear-gradient(135deg, hsl(43 74% 49%), hsl(43 90% 65%), hsl(43 74% 49%));
+    --gradient-parchment: linear-gradient(180deg, hsl(36 39% 92%), hsl(36 39% 85%), hsl(30 35% 75%));
+    --gradient-brass: linear-gradient(135deg, hsl(36 64% 42%), hsl(36 60% 55%), hsl(36 64% 35%));
+    
+    /* Shadows */
+    --shadow-treasure: 0 10px 40px -10px hsl(43 74% 49% / 0.5);
+    --shadow-map: 0 4px 20px hsl(30 25% 12% / 0.3);
+    --shadow-compass: 0 8px 30px hsl(36 64% 35% / 0.4);
+    
+    /* Typography */
+    --font-pirate: 'Cinzel Decorative', 'Georgia', serif;
+    --font-nautical: 'Crimson Text', 'Georgia', serif;
+    
+    /* Animations */
+    --transition-sail: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-wave: all 0.6s cubic-bezier(0.45, 0, 0.55, 1);
+  }
+
+  .dark {
+    /* Dark pirate theme - night sailing */
+    --background: 220 30% 10%;
+    --foreground: 36 39% 88%;
+    
+    --card: 220 25% 15%;
+    --card-foreground: 36 39% 88%;
+    
+    --popover: 220 25% 15%;
+    --popover-foreground: 36 39% 88%;
+    
+    --primary: 43 74% 49%;
+    --primary-foreground: 30 25% 12%;
+    
+    --secondary: 200 69% 30%;
+    --secondary-foreground: 36 39% 88%;
+    
+    --muted: 220 20% 25%;
+    --muted-foreground: 36 30% 70%;
+    
+    --accent: 36 64% 42%;
+    --accent-foreground: 36 39% 88%;
+    
+    --destructive: 0 84% 45%;
+    --destructive-foreground: 36 39% 88%;
+    
+    --border: 220 20% 30%;
+    --input: 220 25% 20%;
+    --ring: 43 74% 49%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+  
+  /* Custom styles for pirate theme */
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+  
+  h1, h2, h3 {
+    font-family: var(--font-pirate);
+  }
+  
+  body {
+    font-family: var(--font-nautical);
+  }
+}
+
+/* Parchment texture effect */
+@layer utilities {
+  .parchment-texture {
+    position: relative;
+    background: var(--gradient-parchment);
+    box-shadow: var(--shadow-map);
+  }
+  
+  .parchment-texture::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      radial-gradient(ellipse at top left, transparent 40%, hsl(30 35% 75% / 0.1)),
+      radial-gradient(ellipse at bottom right, transparent 40%, hsl(30 35% 75% / 0.1));
+    pointer-events: none;
+  }
+  
+  .torn-edge {
+    mask-image: url("data:image/svg+xml,%3Csvg width='100' height='10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10Q5 0 10 10T20 10Q25 0 30 10T40 10Q45 0 50 10T60 10Q65 0 70 10T80 10Q85 0 90 10T100 10' fill='black'/%3E%3C/svg%3E");
+    mask-size: 100px 10px;
+    mask-repeat: repeat-x;
+  }
+  
+  .compass-spin {
+    animation: compassSpin 20s linear infinite;
+  }
+  
+  @keyframes compassSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  .treasure-glow {
+    animation: treasureGlow 2s ease-in-out infinite;
+  }
+  
+  @keyframes treasureGlow {
+    0%, 100% { box-shadow: var(--shadow-treasure); }
+    50% { box-shadow: 0 10px 50px -5px hsl(43 90% 65% / 0.7); }
+  }
+  
+  .wave-motion {
+    animation: waveMotion 8s ease-in-out infinite;
+  }
+  
+  @keyframes waveMotion {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+}
