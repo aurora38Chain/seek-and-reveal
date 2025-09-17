@@ -1,30 +1,32 @@
-# Seek and Reveal
+# 🗺️ Seek & Reveal
 
-A decentralized treasure hunting platform built on blockchain technology with fully homomorphic encryption (FHE) for secure data protection.
+> **Decentralized Treasure Hunting on the Blockchain**
 
-## 🚀 Features
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Built with Vite](https://img.shields.io/badge/Built%20with-Vite-646CFF.svg)](https://vitejs.dev/)
+[![Powered by FHE](https://img.shields.io/badge/Powered%20by-FHE-00D4AA.svg)](https://zama.ai/)
 
-- **Decentralized Treasure Maps**: Create and share encrypted treasure maps on the blockchain
-- **FHE Security**: All sensitive data is encrypted using fully homomorphic encryption
-- **Wallet Integration**: Connect with popular Web3 wallets like Rainbow, MetaMask, and more
-- **Expedition Tracking**: Track your treasure hunting expeditions and progress
-- **Leaderboard System**: Compete with other treasure hunters globally
-- **Privacy-First**: Your treasure locations and clues remain encrypted and private
+---
 
-## 🛠️ Technology Stack
+## 🌟 What is Seek & Reveal?
 
-- **Frontend**: React 18, TypeScript, Vite
-- **UI Components**: shadcn/ui, Tailwind CSS
-- **Blockchain**: Ethereum (Sepolia Testnet)
-- **Encryption**: FHE (Fully Homomorphic Encryption) via Zama
-- **Wallet Integration**: RainbowKit, Wagmi, Viem
-- **State Management**: TanStack Query
+Seek & Reveal is a revolutionary treasure hunting platform that combines the excitement of exploration with cutting-edge blockchain technology. Create encrypted treasure maps, embark on expeditions, and discover rewards while maintaining complete privacy through fully homomorphic encryption.
+
+### ✨ Key Features
+
+- 🔐 **Privacy-First**: All treasure data encrypted with FHE
+- 🗺️ **Interactive Maps**: Create and share encrypted treasure maps
+- 🏆 **Competitive Play**: Global leaderboards and reputation system
+- 💰 **Real Rewards**: Earn tokens for successful expeditions
+- 🌐 **Web3 Native**: Full wallet integration and blockchain storage
+
+---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js 18+ and npm
+- Node.js 18+ 
 - A Web3 wallet (MetaMask, Rainbow, etc.)
 - Sepolia ETH for gas fees
 
@@ -33,85 +35,98 @@ A decentralized treasure hunting platform built on blockchain technology with fu
 ```bash
 # Clone the repository
 git clone https://github.com/aurora38Chain/seek-and-reveal.git
-
-# Navigate to the project directory
 cd seek-and-reveal
 
 # Install dependencies
 npm install
 
-# Start the development server
+# Start development server
 npm run dev
 ```
 
-### Environment Variables
+### Environment Setup
 
-Create a `.env.local` file in the root directory:
+Create a `.env.local` file:
 
 ```env
-NEXT_PUBLIC_CHAIN_ID=11155111
-NEXT_PUBLIC_RPC_URL=https://sepolia.infura.io/v3/b18fb7e6ca7045ac83c41157ab93f990
-NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=2ec9743d0d0cd7fb94dee1a7e6d33475
-NEXT_PUBLIC_INFURA_API_KEY=b18fb7e6ca7045ac83c41157ab93f990
-NEXT_PUBLIC_RPC_URL=https://1rpc.io/sepolia
+VITE_CHAIN_ID=11155111
+VITE_RPC_URL=your_rpc_url_here
+VITE_WALLET_CONNECT_PROJECT_ID=your_project_id_here
+VITE_INFURA_API_KEY=your_infura_key_here
 ```
+
+---
 
 ## 🎮 How to Play
 
-1. **Connect Wallet**: Connect your Web3 wallet to the platform
-2. **Create Treasure Map**: Design and encrypt your treasure map with clues
-3. **Join Expeditions**: Participate in community treasure hunts
-4. **Track Progress**: Monitor your expedition progress and achievements
-5. **Claim Rewards**: Discover treasures and claim your rewards
+### 1. Connect Your Wallet
+Link your Web3 wallet to start your treasure hunting journey.
 
-## 🔐 Security Features
+### 2. Create Treasure Maps
+Design encrypted treasure maps with clues and rewards.
 
-- **FHE Encryption**: All treasure data is encrypted using fully homomorphic encryption
-- **Zero-Knowledge Proofs**: Verify treasure discoveries without revealing locations
-- **Decentralized Storage**: Treasure maps are stored on the blockchain
-- **Privacy Protection**: Your personal data and treasure locations remain private
+### 3. Join Expeditions
+Participate in community treasure hunts and compete with others.
 
-## 🏗️ Smart Contracts
+### 4. Track Progress
+Monitor your expedition progress and achievements in real-time.
 
-The platform uses smart contracts deployed on Sepolia testnet:
+### 5. Claim Rewards
+Discover treasures and claim your well-earned rewards.
 
-- **TreasureMap Contract**: Manages treasure map creation and encryption
-- **Expedition Contract**: Handles expedition tracking and rewards
-- **Reward Contract**: Manages treasure rewards and payouts
+---
 
-## 🚀 Deployment
+## 🛠️ Tech Stack
 
-### Vercel Deployment
+| Category | Technology |
+|----------|------------|
+| **Frontend** | React 18, TypeScript, Vite |
+| **UI/UX** | shadcn/ui, Tailwind CSS |
+| **Blockchain** | Ethereum (Sepolia), FHE |
+| **Wallets** | RainbowKit, Wagmi, Viem |
+| **State** | TanStack Query |
 
-1. Fork this repository
-2. Connect your GitHub account to Vercel
-3. Import the project in Vercel
-4. Set environment variables in Vercel dashboard
-5. Deploy!
+---
 
-### Manual Deployment
+## 🔐 Security & Privacy
 
-```bash
-# Build the project
-npm run build
+### Fully Homomorphic Encryption (FHE)
+- Treasure locations remain encrypted at all times
+- Zero-knowledge proof verification
+- Privacy-preserving computation
 
-# Deploy to your preferred hosting platform
-# The build files will be in the 'dist' directory
-```
+### Smart Contract Security
+- Audited contract code
+- Role-based access control
+- Secure reward distribution
+
+---
+
+## 📖 Documentation
+
+- [Smart Contract Guide](./contracts/README.md)
+- [API Documentation](./docs/api.md)
+- [Deployment Guide](./DEPLOYMENT.md)
+
+---
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md).
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
 
 ## 🔗 Links
 
@@ -120,18 +135,32 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Discord**: [Coming Soon]
 - **Twitter**: [Coming Soon]
 
+---
+
 ## ⚠️ Disclaimer
 
-This is a testnet application. Do not use real funds or sensitive data. Always verify smart contract addresses before interacting with them.
-
-## 🆘 Support
-
-If you encounter any issues or have questions:
-
-1. Check the [Issues](https://github.com/aurora38Chain/seek-and-reveal/issues) page
-2. Join our Discord community
-3. Contact us at support@seekandreveal.com
+This is a testnet application. Do not use real funds or sensitive data. Always verify smart contract addresses before interacting.
 
 ---
 
-**Happy Treasure Hunting! 🏴‍☠️**
+## 🆘 Support
+
+Having issues? We're here to help!
+
+- 📧 Email: support@seekandreveal.com
+- 💬 Discord: [Join our community]
+- 🐛 Issues: [GitHub Issues](https://github.com/aurora38Chain/seek-and-reveal/issues)
+
+---
+
+<div align="center">
+
+**Ready to start your treasure hunting adventure?**
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/aurora38Chain/seek-and-reveal)
+
+---
+
+*Made with ❤️ by the Seek & Reveal team*
+
+</div>

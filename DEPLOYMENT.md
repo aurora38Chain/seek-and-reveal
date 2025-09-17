@@ -1,4 +1,4 @@
-# Vercel Deployment Guide
+# 🚀 Vercel Deployment Guide
 
 ## Step-by-Step Manual Deployment Instructions
 
@@ -38,10 +38,10 @@ In the Vercel project settings, add the following environment variables:
 
 ```
 VITE_CHAIN_ID=11155111
-VITE_RPC_URL=https://sepolia.infura.io/v3/b18fb7e6ca7045ac83c41157ab93f990
-VITE_WALLET_CONNECT_PROJECT_ID=2ec9743d0d0cd7fb94dee1a7e6d33475
-VITE_INFURA_API_KEY=b18fb7e6ca7045ac83c41157ab93f990
-VITE_RPC_URL_ALT=https://1rpc.io/sepolia
+VITE_RPC_URL=your_sepolia_rpc_url_here
+VITE_WALLET_CONNECT_PROJECT_ID=your_wallet_connect_project_id_here
+VITE_INFURA_API_KEY=your_infura_api_key_here
+VITE_RPC_URL_ALT=your_backup_rpc_url_here
 ```
 
 **How to add environment variables:**
@@ -89,19 +89,19 @@ All environment variables are prefixed with `VITE_` to make them available in th
 - Smart contracts need to be deployed separately
 - Update the contract address in `src/hooks/useContract.ts` after deployment
 
-### Troubleshooting
+## Troubleshooting
 
-#### Build Failures
+### Build Failures
 - Check that all environment variables are set correctly
 - Ensure Node.js version is 18+ in Vercel settings
 - Verify package.json dependencies are correct
 
-#### Wallet Connection Issues
+### Wallet Connection Issues
 - Verify Wallet Connect Project ID is correct
 - Check that RPC URLs are accessible
 - Ensure you're on the correct network (Sepolia)
 
-#### Performance Issues
+### Performance Issues
 - Enable Vercel's Edge Functions if needed
 - Configure caching headers for static assets
 - Monitor build logs for optimization opportunities

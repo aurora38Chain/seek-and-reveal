@@ -1,23 +1,26 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background circle -->
+  <!-- Background circle with treasure theme -->
   <circle cx="16" cy="16" r="16" fill="#8B4513"/>
   
-  <!-- Map icon background -->
-  <path d="M8 8h16v16H8z" fill="#D2B48C" stroke="#654321" stroke-width="1"/>
+  <!-- Map icon background (similar to TreasureLogo) -->
+  <path d="M6 6h20v20H6z" fill="#D2B48C" stroke="#654321" stroke-width="1.5"/>
   
   <!-- Map grid lines -->
-  <line x1="12" y1="8" x2="12" y2="24" stroke="#654321" stroke-width="0.5"/>
-  <line x1="16" y1="8" x2="16" y2="24" stroke="#654321" stroke-width="0.5"/>
-  <line x1="20" y1="8" x2="20" y2="24" stroke="#654321" stroke-width="0.5"/>
-  <line x1="8" y1="12" x2="24" y2="12" stroke="#654321" stroke-width="0.5"/>
-  <line x1="8" y1="16" x2="24" y2="16" stroke="#654321" stroke-width="0.5"/>
-  <line x1="8" y1="20" x2="24" y2="20" stroke="#654321" stroke-width="0.5"/>
+  <line x1="10" y1="6" x2="10" y2="26" stroke="#654321" stroke-width="0.8"/>
+  <line x1="16" y1="6" x2="16" y2="26" stroke="#654321" stroke-width="0.8"/>
+  <line x1="22" y1="6" x2="22" y2="26" stroke="#654321" stroke-width="0.8"/>
+  <line x1="6" y1="10" x2="26" y2="10" stroke="#654321" stroke-width="0.8"/>
+  <line x1="6" y1="16" x2="26" y2="16" stroke="#654321" stroke-width="0.8"/>
+  <line x1="6" y1="22" x2="26" y2="22" stroke="#654321" stroke-width="0.8"/>
   
-  <!-- X marks the spot -->
-  <line x1="14" y1="14" x2="18" y2="18" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
-  <line x1="18" y1="14" x2="14" y2="18" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
+  <!-- X marks the spot (matching TreasureLogo style) -->
+  <line x1="12" y1="12" x2="20" y2="20" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+  <line x1="20" y1="12" x2="12" y2="20" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
   
-  <!-- Treasure dot -->
-  <circle cx="16" cy="16" r="2" fill="#FFD700"/>
-  <circle cx="16" cy="16" r="1" fill="#FFA500"/>
+  <!-- Treasure dot in center (matching TreasureLogo) -->
+  <circle cx="16" cy="16" r="2.5" fill="#FFD700"/>
+  <circle cx="16" cy="16" r="1.5" fill="#FFA500"/>
+  
+  <!-- Subtle glow effect -->
+  <circle cx="16" cy="16" r="4" fill="none" stroke="#FFD700" stroke-width="0.5" opacity="0.3"/>
 </svg>
