@@ -1,10 +1,35 @@
 import { Navigation } from "@/components/Navigation";
 import { ExpeditionEntry } from "@/components/ExpeditionEntry";
+import { ExpeditionProgress } from "@/components/ExpeditionProgress";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Users, Trophy, Clock, Ship } from "lucide-react";
+import { Users, Trophy, Clock, Ship, MapPin } from "lucide-react";
+import { useState } from "react";
+import { encryptCoordinates } from "@/lib/fhe";
 
 const Expeditions = () => {
+  const [selectedExpedition, setSelectedExpedition] = useState<string | null>(null);
+  const [foundTreasures, setFoundTreasures] = useState<Map<number, any>>(new Map());
+
+  // Mock encrypted treasure data for demonstration
+  const mockEncryptedTreasures = [
+    encryptCoordinates({
+      latitude: 25.7617,
+      longitude: -80.1918,
+      radius: 100
+    }),
+    encryptCoordinates({
+      latitude: 25.7743,
+      longitude: -80.1937,
+      radius: 100
+    }),
+    encryptCoordinates({
+      latitude: 25.7907,
+      longitude: -80.1300,
+      radius: 100
+    })
+  ];
+
   const activeExpeditions = [
     {
       id: "1",
@@ -12,7 +37,8 @@ const Expeditions = () => {
       participants: "15/20",
       prizePool: "1000 GOLD",
       timeLeft: "2d 5h",
-      difficulty: "Medium"
+      difficulty: "Medium",
+      encryptedTreasures: mockEncryptedTreasures
     },
     {
       id: "2",
@@ -20,7 +46,8 @@ const Expeditions = () => {
       participants: "8/12",
       prizePool: "2500 GOLD",
       timeLeft: "5d 12h",
-      difficulty: "Legendary"
+      difficulty: "Legendary",
+      encryptedTreasures: mockEncryptedTreasures
     },
     {
       id: "3",
@@ -28,9 +55,14 @@ const Expeditions = () => {
       participants: "20/20",
       prizePool: "750 GOLD",
       timeLeft: "Starting Soon",
-      difficulty: "Hard"
+      difficulty: "Hard",
+      encryptedTreasures: mockEncryptedTreasures
     }
   ];
+
+  const handleTreasureFound = (treasureId: number, coordinates: any) => {
+    setFoundTreasures(prev => new Map([...prev, [treasureId, coordinates]]));
+  };
 
   return (
     <div className="min-h-screen bg-gradient-ocean">
@@ -75,12 +107,63 @@ const Expeditions = () => {
                   </div>
                 </div>
                 
-                <Button variant="treasure" className="w-full">
-                  View Details
+                <Button 
+                  variant="treasure" 
+                  className="w-full"
+                  onClick={() => setSelectedExpedition(
+                    selectedExpedition === expedition.id ? null : expedition.id
+                  )}
+                >
+                  {selectedExpedition === expedition.id ? 'Hide Details' : 'View Details'}
                 </Button>
               </Card>
             ))}
           </div>
+
+          {/* Expedition Progress Section */}
+          {selectedExpedition && (
+            <div className="mb-16">
+              <h2 className="text-3xl font-pirate text-center text-parchment mb-8">
+                Expedition Progress
+              </h2>
+              <div className="max-w-4xl mx-auto">
+                <ExpeditionProgress
+                  expeditionId={parseInt(selectedExpedition)}
+                  encryptedTreasures={activeExpeditions.find(e => e.id === selectedExpedition)?.encryptedTreasures || []}
+                  onTreasureFound={handleTreasureFound}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Found Treasures Display */}
+          {foundTreasures.size > 0 && (
+            <div className="mb-16">
+              <h2 className="text-3xl font-pirate text-center text-parchment mb-8">
+                Discovered Treasures
+              </h2>
+              <div className="grid gap-4 max-w-2xl mx-auto">
+                {Array.from(foundTreasures.entries()).map(([treasureId, coordinates]) => (
+                  <Card key={treasureId} className="parchment-texture border-4 border-treasure p-4">
+                    <div className="flex items-center gap-3">
+                      <MapPin className="w-6 h-6 text-treasure" />
+                      <div>
+                        <h3 className="font-pirate text-lg text-mapInk">
+                          Treasure #{treasureId + 1}
+                        </h3>
+                        <p className="font-nautical text-mapInk/70">
+                          Coordinates: {coordinates.latitude.toFixed(4)}, {coordinates.longitude.toFixed(4)}
+                        </p>
+                        <p className="font-nautical text-mapInk/70">
+                          Discovery radius: {coordinates.radius}m
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
           
           <ExpeditionEntry />
         </div>

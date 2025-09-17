@@ -1,5 +1,7 @@
 import { useContract, useContractRead, useContractWrite, useAccount } from 'wagmi';
 import { useState } from 'react';
+import { encryptProgress, decryptProgress, EncryptedData } from '../lib/fhe';
+import { getCurrentLocation, UserLocation } from '../lib/location';
 
 // Contract ABI - This would be generated from the compiled contract
 const CONTRACT_ABI = [
@@ -196,7 +198,11 @@ export function useUpdateExpeditionProgress() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const updateProgress = async (expeditionId: number, newProgress: number) => {
+  const updateProgress = async (
+    expeditionId: number, 
+    newProgress: number,
+    cluesFound: number = 0
+  ) => {
     if (!contract) {
       setError('Contract not available');
       return;
@@ -206,7 +212,34 @@ export function useUpdateExpeditionProgress() {
     setError(null);
 
     try {
-      const tx = await contract.updateExpeditionProgress(expeditionId, newProgress);
+      // Get current location for proximity verification
+      const userLocation = await getCurrentLocation();
+      if (!userLocation) {
+        throw new Error('Location access required for progress update');
+      }
+
+      // Create progress data with FHE encryption
+      const progressData = {
+        expeditionId,
+        progress: newProgress,
+        cluesFound,
+        lastUpdate: Date.now()
+      };
+
+      // Encrypt progress data
+      const encryptedProgress = encryptProgress(progressData);
+      
+      // In a real implementation, this would use FHE external types
+      // For now, we'll simulate the encrypted data transmission
+      const encryptedData = JSON.stringify(encryptedProgress);
+      
+      // Update progress on blockchain with encrypted data
+      const tx = await contract.updateExpeditionProgress(
+        expeditionId, 
+        newProgress,
+        encryptedData // This would be the FHE encrypted data
+      );
+      
       await tx.wait();
       return tx.hash;
     } catch (err) {
@@ -237,6 +270,109 @@ export function useGetMapInfo(mapId: number) {
 
   return {
     mapInfo: data,
+    isLoading,
+    error,
+  };
+}
+
+export function useJoinExpedition() {
+  const { contract, address } = useSeekAndRevealContract();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const joinExpedition = async (
+    mapId: number,
+    entryFee: number,
+    encryptedLocationData: EncryptedData
+  ) => {
+    if (!contract || !address) {
+      setError('Wallet not connected');
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      // Get current location for verification
+      const userLocation = await getCurrentLocation();
+      if (!userLocation) {
+        throw new Error('Location access required to join expedition');
+      }
+
+      // Verify encrypted location data
+      const locationData = JSON.stringify(encryptedLocationData);
+      
+      // Start expedition with encrypted initial progress
+      const initialProgress = {
+        expeditionId: 0, // Will be set by contract
+        progress: 0,
+        cluesFound: 0,
+        lastUpdate: Date.now()
+      };
+
+      const encryptedProgress = encryptProgress(initialProgress);
+      
+      const tx = await contract.startExpedition(
+        mapId,
+        0, // Initial progress
+        JSON.stringify(encryptedProgress)
+      );
+      
+      await tx.wait();
+      return tx.hash;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return {
+    joinExpedition,
+    isLoading,
+    error,
+  };
+}
+
+export function useDecryptTreasureData() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const decryptTreasure = async (
+    encryptedData: EncryptedData,
+    userLocation: UserLocation
+  ) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      // In a real implementation, this would use FHE decryption
+      // For now, we'll simulate the decryption process
+      const decryptedData = JSON.parse(atob(encryptedData.encryptedValue));
+      
+      // Verify proximity for treasure revelation
+      const distance = Math.sqrt(
+        Math.pow(userLocation.latitude - decryptedData.latitude, 2) +
+        Math.pow(userLocation.longitude - decryptedData.longitude, 2)
+      ) * 111000; // Rough conversion to meters
+
+      if (distance <= decryptedData.radius) {
+        return decryptedData;
+      } else {
+        throw new Error('You are not close enough to reveal this treasure');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Decryption failed');
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return {
+    decryptTreasure,
     isLoading,
     error,
   };

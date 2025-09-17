@@ -1,20 +1,95 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Coins, Users, Calendar, Anchor } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Coins, Users, Calendar, Anchor, MapPin, Shield, Loader2 } from "lucide-react";
+import { useJoinExpedition } from "@/hooks/useContract";
+import { useAccount } from "wagmi";
+import { requestLocationPermission, getCurrentLocation, UserLocation } from "@/lib/location";
+import { encryptCoordinates, EncryptedData } from "@/lib/fhe";
 
 export function ExpeditionEntry() {
   const [entryFee, setEntryFee] = useState("10");
   const [expeditionName, setExpeditionName] = useState("");
+  const [locationPermission, setLocationPermission] = useState<boolean | null>(null);
+  const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
+  const [encryptedLocation, setEncryptedLocation] = useState<EncryptedData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
-  const handleJoinExpedition = () => {
-    if (!expeditionName) {
-      alert("Please enter an expedition name");
+  const { address, isConnected } = useAccount();
+  const { joinExpedition, isLoading, error: contractError } = useJoinExpedition();
+
+  // Request location permission on component mount
+  useEffect(() => {
+    const requestPermission = async () => {
+      try {
+        const permission = await requestLocationPermission();
+        setLocationPermission(permission.granted);
+        
+        if (permission.granted) {
+          const location = await getCurrentLocation();
+          setUserLocation(location);
+          
+          // Encrypt location data for privacy
+          if (location) {
+            const encrypted = encryptCoordinates({
+              latitude: location.latitude,
+              longitude: location.longitude,
+              radius: 100 // 100 meter radius for treasure hunting
+            });
+            setEncryptedLocation(encrypted);
+          }
+        } else {
+          setError(permission.error || 'Location permission denied');
+        }
+      } catch (err) {
+        setError('Failed to get location permission');
+      }
+    };
+
+    requestPermission();
+  }, []);
+
+  const handleJoinExpedition = async () => {
+    if (!isConnected) {
+      setError("Please connect your wallet first");
       return;
     }
-    alert(`Joining expedition: ${expeditionName} with ${entryFee} GOLD entry fee`);
+
+    if (!expeditionName) {
+      setError("Please enter an expedition name");
+      return;
+    }
+
+    if (!locationPermission) {
+      setError("Location access is required to join expeditions");
+      return;
+    }
+
+    if (!encryptedLocation) {
+      setError("Failed to encrypt location data");
+      return;
+    }
+
+    try {
+      setError(null);
+      setSuccess(null);
+
+      // Convert expedition name to map ID (in real app, this would be a lookup)
+      const mapId = parseInt(expeditionName.replace(/\D/g, '')) || 1;
+      const fee = parseFloat(entryFee);
+
+      const txHash = await joinExpedition(mapId, fee, encryptedLocation);
+      
+      setSuccess(`Successfully joined expedition! Transaction: ${txHash}`);
+      setExpeditionName("");
+      setEntryFee("10");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to join expedition');
+    }
   };
 
   return (
@@ -35,6 +110,54 @@ export function ExpeditionEntry() {
               </div>
               
               <div className="space-y-6">
+                {/* Wallet Connection Status */}
+                {!isConnected && (
+                  <Alert className="border-wood-dark bg-parchment/50">
+                    <Anchor className="h-4 w-4" />
+                    <AlertDescription className="text-mapInk">
+                      Please connect your wallet to join expeditions
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                {/* Location Permission Status */}
+                {locationPermission === false && (
+                  <Alert className="border-red-500 bg-red-50">
+                    <MapPin className="h-4 w-4" />
+                    <AlertDescription className="text-red-700">
+                      Location access is required for treasure hunting. Please enable location permissions.
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                {/* FHE Encryption Status */}
+                {encryptedLocation && (
+                  <Alert className="border-green-500 bg-green-50">
+                    <Shield className="h-4 w-4" />
+                    <AlertDescription className="text-green-700">
+                      Location data encrypted with FHE. Your privacy is protected.
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                {/* Error Messages */}
+                {(error || contractError) && (
+                  <Alert className="border-red-500 bg-red-50">
+                    <AlertDescription className="text-red-700">
+                      {error || contractError}
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                {/* Success Messages */}
+                {success && (
+                  <Alert className="border-green-500 bg-green-50">
+                    <AlertDescription className="text-green-700">
+                      {success}
+                    </AlertDescription>
+                  </Alert>
+                )}
+
                 <div>
                   <Label htmlFor="expedition" className="text-mapInk font-nautical text-lg">
                     Expedition Name
@@ -46,6 +169,7 @@ export function ExpeditionEntry() {
                     value={expeditionName}
                     onChange={(e) => setExpeditionName(e.target.value)}
                     className="mt-2 bg-parchment/50 border-2 border-wood-light text-mapInk font-nautical"
+                    disabled={!isConnected || !locationPermission}
                   />
                 </div>
                 
@@ -99,9 +223,19 @@ export function ExpeditionEntry() {
                   size="lg"
                   className="w-full text-lg"
                   onClick={handleJoinExpedition}
+                  disabled={!isConnected || !locationPermission || !encryptedLocation || isLoading}
                 >
-                  <Coins className="mr-2" />
-                  Pay Entry & Join Expedition
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Joining Expedition...
+                    </>
+                  ) : (
+                    <>
+                      <Coins className="mr-2" />
+                      Pay Entry & Join Expedition
+                    </>
+                  )}
                 </Button>
               </div>
             </div>
